@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
+        android:clickable="true"
         android:id="@+id/feedItemUser"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView" />

@@ -21,7 +21,6 @@ public class FeedListAdapter extends ArrayAdapter<FeedItem> {
         super(context, R.layout.feed_item, data);
         this.context = context;
         this.data = data;
-        System.out.println("CONTEXT: " + this.context + ", DATA: " + this.data);
     }
 
 

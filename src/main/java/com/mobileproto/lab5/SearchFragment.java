@@ -54,13 +54,12 @@ public class SearchFragment extends Fragment {
                 //URL to GET all tweet data from the FEED
                 String searchURL = "http://twitterproto.herokuapp.com/tweets?q=" + searchWords;
 
-                // Creating JSON Parser instance
+                // Creating JSON Parser
                 JSONParser jParser = new JSONParser();
 
                 try {
                     //Getting the array with all Tweets
                     allSearchData = jParser.makeSearchList(searchURL);
-                    System.out.println("RETRIEVED: " + allSearchData);
                 }
                 catch (Exception E){
                     System.out.println("JPARSER CANNOT RETRIEVE TWEETS");

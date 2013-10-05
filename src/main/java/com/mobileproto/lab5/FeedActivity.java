@@ -2,6 +2,7 @@ package com.mobileproto.lab5;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class FeedActivity extends Activity {
 
-    public static String myname = "mmay";
+    public static String myname = "reaper";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class FeedActivity extends Activity {
         FeedFragment feedFragment = new FeedFragment();
         ConnectionFragment connectionFragment = new ConnectionFragment();
         SearchFragment searchFragment = new SearchFragment();
+        TweetFragment tweetFragment = new TweetFragment();
 
         /*
          *  The following code is used to set up the tabs used for navigation.
@@ -44,12 +46,26 @@ public class FeedActivity extends Activity {
         ActionBar.Tab searchTab = actionBar.newTab().setText(R.string.tab3);
         searchTab.setTabListener(new NavTabListener(searchFragment));
 
+        ActionBar.Tab newtweetTab = actionBar.newTab().setText(R.string.tab4);
+        newtweetTab.setTabListener(new NavTabListener(tweetFragment));
+
         actionBar.addTab(feedTab);
         actionBar.addTab(connectionTab);
         actionBar.addTab(searchTab);
+        actionBar.addTab(newtweetTab);
 
         actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.android_dark_blue)));
 
+    }
+
+    public void clickOnTweet(int fragViewID){
+        //More universal method for switching from List Fragment feed to Tweet detail view
+        DetailFragment details = new DetailFragment();
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(fragViewID, details);
+        transaction.commit();
     }
 
 }

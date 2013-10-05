@@ -8,21 +8,33 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 public class JSONParser {
 
@@ -158,6 +170,42 @@ public class JSONParser {
         return allSearchData;
     }
 
+    public void postTweetToUrl(final String urlToPost, final String daMessage) {
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost(urlToPost);
+                    json.put("tweet", daMessage);
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                    /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    Log.e("Error", "Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
+            }
+        };
+
+        t.start();
+    }
+
+
     private class BackgroundTask extends AsyncTask<String, Void, String>{
 
         @Override
@@ -204,6 +252,42 @@ public class JSONParser {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+        }
+    }
+
+    private class BackgroundPostTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String...url) {
+            // TODO Auto-generated method stub
+
+            return null;
+        }
+
+        protected void onPostExecute(String result){
+            //pb.setVisibility(View.GONE);
+            //Toast.makeText(getApplicationContext(), "command sent", Toast.LENGTH_LONG).show();
+        }
+
+        public void postData(String valueIWantToSend) {
+            // Create a new HttpClient and Post Header
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("http://somewebsite.com/receiver.php");
+
+            try {
+                // Add your data
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+                nameValuePairs.add(new BasicNameValuePair("myHttpData", valueIWantToSend));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                // Execute HTTP Post Request
+                HttpResponse response = httpclient.execute(httppost);
+
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+            }
         }
     }
 }

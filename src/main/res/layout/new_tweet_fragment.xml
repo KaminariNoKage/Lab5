@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingTop="20px"
+    android:paddingLeft="20px" android:paddingRight="20px">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter New Tweet:"
+        android:id="@+id/newtweetTitle"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:maxLength="140"
+        android:gravity="top"
+        android:background="#F0F0F0"
+        android:ems="10"
+        android:id="@+id/newtweetField"
+        android:layout_below="@+id/newtweetTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:padding="8dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tweet It"
+        android:id="@+id/tweetitButton"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/newtweetField"
+        android:layout_alignRight="@+id/newTweetField" />
+
+</RelativeLayout>
