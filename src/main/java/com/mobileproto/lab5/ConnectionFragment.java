@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -32,13 +33,8 @@ public class ConnectionFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.connections_fragment, null);
 
-        // Create dummy data for demo
-        List<FeedNotification> notifications = new ArrayList<FeedNotification>();
-        MentionNotification mention = new MentionNotification("@EvanSimpson", "@TimRyan", "Hey @TimRyan");
-        FollowNotification follow = new FollowNotification("@reyner", "@TimRyan");
-
-        notifications.add(mention);
-        notifications.add(follow);
+        // Get all the connections (followers, mentions, etc.)
+        List<FeedNotification> notifications = JSONParser.getAllConnections();
 
         ConnectionListAdapter connectionListAdapter = new ConnectionListAdapter(this.getActivity(), notifications);
         ListView connectionList = (ListView) v.findViewById(R.id.connectionListView);

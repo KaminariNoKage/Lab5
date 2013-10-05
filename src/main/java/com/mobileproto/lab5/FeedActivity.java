@@ -14,6 +14,8 @@ import java.util.List;
 
 public class FeedActivity extends Activity {
 
+    public static String myname = "mmay";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,5 @@ public class FeedActivity extends Activity {
         actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.android_dark_blue)));
 
     }
-
 
 }

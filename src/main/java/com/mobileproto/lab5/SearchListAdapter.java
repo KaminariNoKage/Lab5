@@ -7,47 +7,48 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by evan on 9/25/13.
+ * Created by kaustin on 10/4/13.
  */
-public class FeedListAdapter extends ArrayAdapter<FeedItem> {
+public class SearchListAdapter extends ArrayAdapter<FeedItem> {
 
     private final Context context;
     private final List<FeedItem> data;
 
-    public FeedListAdapter(Context context,  List<FeedItem> data){
-        super(context, R.layout.feed_item, data);
+    public SearchListAdapter(Context context,  List<FeedItem> data){
+        super(context, R.layout.search_item, data);
         this.context = context;
         this.data = data;
         System.out.println("CONTEXT: " + this.context + ", DATA: " + this.data);
     }
 
-
-    private class FeedItemHolder{
+    private class SearchItemHolder{
 
         TextView userName;
         TextView text;
-
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        FeedItemHolder holder;
-        View feedRow = convertView;
+        System.out.println("GETTING SEARCH LIST VIEW");
 
-        if(feedRow == null){
+        SearchItemHolder holder;
+        View searchRow = convertView;
+
+        if(searchRow == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            feedRow = inflater.inflate(R.layout.feed_item, parent, false);
-            holder = new FeedItemHolder();
-            holder.userName = (TextView) feedRow.findViewById(R.id.feedItemUser);
-            holder.text = (TextView) feedRow.findViewById(R.id.feedText);
+            searchRow = inflater.inflate(R.layout.search_item, parent, false);
+            holder = new SearchItemHolder();
+            holder.userName = (TextView) searchRow.findViewById(R.id.searchItemUser);
+            holder.text = (TextView) searchRow.findViewById(R.id.searchText);
 
-            feedRow.setTag(holder);
+            searchRow.setTag(holder);
         } else {
-            holder = (FeedItemHolder) feedRow.getTag();
+            holder = (SearchItemHolder) searchRow.getTag();
         }
 
         FeedItem item = data.get(position);
@@ -55,7 +56,6 @@ public class FeedListAdapter extends ArrayAdapter<FeedItem> {
         holder.userName.setText(item.userName);
         holder.text.setText(item.text);
 
-        return feedRow;
+        return searchRow;
     }
-
 }
