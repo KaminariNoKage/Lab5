@@ -1,6 +1,8 @@
 package com.mobileproto.lab5;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.apache.http.HttpResponse;
@@ -31,29 +34,11 @@ import java.util.List;
  */
 public class FeedFragment extends Fragment {
 
-    public List<FeedItem> allData;
-
+    public static List<FeedItem> allData;
 
     public void onCreate(Bundle savedInstanceState) {
-        allData = new ArrayList<FeedItem>();
+        allData = FeedActivity.allData;
         super.onCreate(savedInstanceState);
-
-        //Getting JSON data
-        //URL to GET all tweet data from the FEED
-        String feedURL = "http://twitterproto.herokuapp.com/tweets";
-
-        // Creating JSON Parser instance
-        JSONParser jParser = new JSONParser();
-
-        try {
-            //Getting the array with all Tweets
-            jParser.makeTweetList(feedURL);
-            allData = jParser.getAllData();
-        }
-        catch (Exception E){
-            System.out.println("JPARSER CANNOT RETRIEVE TWEETS");
-        }
-
     }
 
     @Override
@@ -64,26 +49,22 @@ public class FeedFragment extends Fragment {
 
 
         // Set up the ArrayAdapter for the feedList
-       FeedListAdapter feedListAdapter = new FeedListAdapter(this.getActivity(), allData);
+        FeedListAdapter feedListAdapter = new FeedListAdapter(this.getActivity(), allData);
         ListView feedList = (ListView) v.findViewById(R.id.feedList);
         feedList.setAdapter(feedListAdapter);
 
-        /*feedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        feedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Creating intent to pass information
-                Intent in = new Intent(getApplicationContext(), NoteDetailActivity.class);
+                DetailFragment details = new DetailFragment();
 
-                //Getting the Title and content of the note
-                String title = notedb.getString(1);
-                String text = notedb.getString(2);
-                in.putExtra("title", title);
-                in.putExtra("text", text);
-
-                //Going to new display of the note
-                startActivity(in);
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.feedList, details);
+                transaction.commit();
             }
-        }); */
+        });
 
         return v;
 

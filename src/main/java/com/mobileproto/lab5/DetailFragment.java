@@ -27,12 +27,12 @@ public class DetailFragment extends Fragment {
         View v = inflater.inflate(R.layout.feed_item, null);
 
         // Get all the connections (followers, mentions, etc.)
-        List<FeedNotification> notifications = JSONParser.getAllConnections();
+        //List<FeedNotification> notifications = JSONParser.getAllConnections();
 
-        ConnectionListAdapter connectionListAdapter = new ConnectionListAdapter(this.getActivity(), notifications);
-        ListView connectionList = (ListView) v.findViewById(R.id.connectionListView);
+        //ConnectionListAdapter connectionListAdapter = new ConnectionListAdapter(this.getActivity(), notifications);
+        //ListView connectionList = (ListView) v.findViewById(R.id.connectionListView);
 
-        connectionList.setAdapter(connectionListAdapter);
+        //connectionList.setAdapter(connectionListAdapter);
 
         return v;
     }

@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ListView;
 
@@ -16,12 +17,17 @@ import java.util.List;
 public class FeedActivity extends Activity {
 
     public static String myname = "reaper";
+    public static List<FeedItem> allData;
+    public static TweetsDbHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        allData = new ArrayList<FeedItem>();
+        dbHelper = new TweetsDbHelper(this);
+        updateDB();
 
         // Define view fragments
         FeedFragment feedFragment = new FeedFragment();
@@ -58,14 +64,24 @@ public class FeedActivity extends Activity {
 
     }
 
-    public void clickOnTweet(int fragViewID){
-        //More universal method for switching from List Fragment feed to Tweet detail view
-        DetailFragment details = new DetailFragment();
+    public void updateDB(){
+        //Getting JSON data
+        //URL to GET all tweet data from the FEED
+        String feedURL = "http://twitterproto.herokuapp.com/tweets";
 
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(fragViewID, details);
-        transaction.commit();
+        // Creating JSON Parser instance
+        JSONParser jParser = new JSONParser();
+
+        try {
+            //Getting the array with all Tweets
+            jParser.makeTweetList(feedURL);
+            allData = jParser.getAllData();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("JPARSER CANNOT RETRIEVE TWEETS");
+        }
+
     }
 
 }

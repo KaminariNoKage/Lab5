@@ -30,10 +30,7 @@ public class UserViewFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.user_fragment, null);
 
-        Intent intent = getActivity().getIntent();
-
-        TextView userviewname = (TextView) getActivity().findViewById(R.id.userviewname);
-        userviewname.setText(intent.getStringExtra("userviewname"));
+        TextView userviewname = (TextView) v.findViewById(R.id.userviewname);
         List<FeedItem> allUserviewData = new ArrayList<FeedItem>();
 
         //URL to GET all tweet data from the the USERNAME/tweets

@@ -11,6 +11,7 @@ import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
@@ -82,9 +84,19 @@ public class JSONParser {
         for (int i=0; i < allTweets.length(); i++){
             try{
                 //Unpacking tweet into displayable form
-                String username = "@" + allTweets.getJSONObject(i).get("username").toString();
+                String username = allTweets.getJSONObject(i).get("username").toString();
+                String id = allTweets.getJSONObject(i).get("_id").toString();
                 String tweet = allTweets.getJSONObject(i).get("tweet").toString();
-                FeedItem feedTweet = new FeedItem(username, tweet);
+                String date = allTweets.getJSONObject(i).get("date").toString();
+
+                //Checking if in Database; if not, add it;
+                if (!FeedActivity.dbHelper.isInTweetsDB(id)){
+                    FeedActivity.dbHelper.addtoTweetFeedDB(allTweets.getJSONObject(i));
+                    System.out.println("ADDED TO DATABASE");
+                }
+
+                //Adding to the main list
+                FeedItem feedTweet = new FeedItem("@" + username, tweet);
                 allData.add(feedTweet);
 
                 checkMentions(allTweets.getJSONObject(i));
@@ -130,7 +142,7 @@ public class JSONParser {
         JSONObject json = new JSONObject(urlJSON.get());
         JSONArray jsonarray = json.getJSONArray("following");
 
-        //Goes through main tweets to check if @myname mentioned
+        //Converting String
         String myname = "@" + FeedActivity.myname;
 
         for (int i=0; i < jsonarray.length(); i++){
@@ -138,6 +150,24 @@ public class JSONParser {
             FollowNotification follow = new FollowNotification(username, myname);
             allConnections.add(follow);
         }
+
+    }
+    public void followingsToDB() throws Exception {
+        //Getting people user follows
+        String followURL = "http://twitterproto.herokuapp.com/" + FeedActivity.myname + "/following";
+        String followerURL = "http://twitterproto.herokuapp.com/" + FeedActivity.myname + "/followers";
+
+        //Passing URL to Asynced task, retrieving JSON string from internet
+        urlJSON.execute(followURL);
+
+        JSONObject followingjson = new JSONObject(urlJSON.get());
+        JSONArray followingarray = followingjson.getJSONArray("following");
+
+        urlJSON.execute(followerURL);
+        JSONObject followerjson = new JSONObject(urlJSON.get());
+        JSONArray followerarray = followerjson.getJSONArray("followers");
+
+        FeedActivity.dbHelper.addtoUsersDB(FeedActivity.myname, followerarray, followingarray);
 
     }
 
@@ -255,39 +285,4 @@ public class JSONParser {
         }
     }
 
-    private class BackgroundPostTask extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected String doInBackground(String...url) {
-            // TODO Auto-generated method stub
-
-            return null;
-        }
-
-        protected void onPostExecute(String result){
-            //pb.setVisibility(View.GONE);
-            //Toast.makeText(getApplicationContext(), "command sent", Toast.LENGTH_LONG).show();
-        }
-
-        public void postData(String valueIWantToSend) {
-            // Create a new HttpClient and Post Header
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://somewebsite.com/receiver.php");
-
-            try {
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("myHttpData", valueIWantToSend));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
-
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
-        }
-    }
 }
