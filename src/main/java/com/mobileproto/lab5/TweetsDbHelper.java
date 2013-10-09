@@ -91,13 +91,14 @@ public class TweetsDbHelper extends SQLiteOpenHelper {
         values.put(FeedEntry.COLUMN_NAME_ID, objInfo.getString("_id"));
         values.put(FeedEntry.COLUMN_NAME_USERNAME, objInfo.getString("username"));
         values.put(FeedEntry.COLUMN_NAME_TWEET, objInfo.getString("tweet"));
-        values.put(FeedEntry.COLUMN_NAME_DATE, objInfo.getInt("date"));
+        values.put(FeedEntry.COLUMN_NAME_DATE, objInfo.getString("date"));
 
         // insert row
         long newRowId = db.insert(FeedEntry.TABLE_TWEETFEED, null, values);
+        Log.v("ROW ID: ", ""+newRowId);
 
     }
-    public Cursor getTweetFeedDB(String id){
+    public Cursor getTweetFeedDB(String date){
         //Getting the query of the Main tweet feed
         String[] allCols = {FeedEntry._ID,
                 FeedEntry.COLUMN_NAME_ID,
@@ -105,10 +106,12 @@ public class TweetsDbHelper extends SQLiteOpenHelper {
                 FeedEntry.COLUMN_NAME_TWEET,
                 FeedEntry.COLUMN_NAME_DATE};
         //Turning DB into string array, getting specific title of what is clicked
-        Cursor tweetsdb = this.getWritableDatabase().query(FeedEntry.TABLE_TWEETFEED,
-                allCols, "tweetid=" + "\"" + id + "\"", null, null, null, null);
+        return this.getReadableDatabase().query(FeedEntry.TABLE_TWEETFEED,
+                allCols, "date=" + "\"" + date + "\"", null, null, null, null);//"date=" + "\"" + date + "\"", null, null, null, null);
 
-        return tweetsdb;
+//        tweetsdb.moveToFirst();
+
+//        return tweetsdb;
     }
     public boolean isInTweetsDB(String id) {
         //Checks if a tweet is stored in the TWEETFEED database
@@ -131,7 +134,7 @@ public class TweetsDbHelper extends SQLiteOpenHelper {
 
         // insert row
         long newRowId = db.insert(FeedEntry.TABLE_USERS, null, values);
-
+        Log.v("ROW ID: ", ""+newRowId);
     }
 
     public Cursor getUsersDB(String username){
@@ -141,7 +144,7 @@ public class TweetsDbHelper extends SQLiteOpenHelper {
                 FeedEntry.COLUMN_NAME_FOLLOWERS,
                 FeedEntry.COLUMN_NAME_FOLLOWING};
         //Turning DB into string array, getting specific title of what is clicked
-        Cursor usersdb = getWritableDatabase().query(FeedEntry.TABLE_USERS,
+        Cursor usersdb = this.getReadableDatabase().query(FeedEntry.TABLE_USERS,
                 allCols, "username=" + "\"" + username + "\"", null, null, null, null);
 
         return usersdb;

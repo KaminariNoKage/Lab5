@@ -1,9 +1,12 @@
 package com.mobileproto.lab5;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ public class FeedListAdapter extends ArrayAdapter<FeedItem> {
 
         TextView userName;
         TextView text;
+        TextView date;
 
     }
 
@@ -44,6 +48,7 @@ public class FeedListAdapter extends ArrayAdapter<FeedItem> {
             holder = new FeedItemHolder();
             holder.userName = (TextView) feedRow.findViewById(R.id.feedItemUser);
             holder.text = (TextView) feedRow.findViewById(R.id.feedText);
+            holder.date = (TextView) feedRow.findViewById(R.id.feedDate);
 
             feedRow.setTag(holder);
         } else {
@@ -54,6 +59,10 @@ public class FeedListAdapter extends ArrayAdapter<FeedItem> {
 
         holder.userName.setText(item.userName);
         holder.text.setText(item.text);
+        holder.date.setText(item.date);
+
+
+
 
 
         return feedRow;

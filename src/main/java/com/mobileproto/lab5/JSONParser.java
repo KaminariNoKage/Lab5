@@ -96,7 +96,7 @@ public class JSONParser {
                 }
 
                 //Adding to the main list
-                FeedItem feedTweet = new FeedItem("@" + username, tweet);
+                FeedItem feedTweet = new FeedItem("@" + username, tweet, date);
                 allData.add(feedTweet);
 
                 checkMentions(allTweets.getJSONObject(i));
@@ -186,7 +186,8 @@ public class JSONParser {
                 //Unpacking tweet into displayable form
                 String username = "@" + allTweets.getJSONObject(i).get("username").toString();
                 String tweet = allTweets.getJSONObject(i).get("tweet").toString();
-                FeedItem feedTweet = new FeedItem(username, tweet);
+                String date = allTweets.getJSONObject(i).get("date").toString();
+                FeedItem feedTweet = new FeedItem(username, tweet, date);
                 allSearchData.add(feedTweet);
             }
             catch (JSONException E){

@@ -7,10 +7,12 @@ public class FeedItem {
 
     public String text;
     public String userName;
+    public String date;
 
-    public FeedItem(String userName, String text){
+    public FeedItem(String userName, String text, String date){
         this.userName = userName;
         this.text = text;
+        this.date = date;
     }
 
 }
